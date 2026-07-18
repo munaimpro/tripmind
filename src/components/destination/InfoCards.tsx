@@ -1,8 +1,8 @@
-import { DestinationDetail } from "@/data/destinationDetails";
+import type { ApiDestination } from "@/types/api";
 import { Banknote, Languages, Bus, ShieldCheck, Wifi } from "lucide-react";
 
 interface InfoCardsProps {
-  destination: DestinationDetail;
+  destination: ApiDestination;
 }
 
 export default function InfoCards({ destination }: InfoCardsProps) {
@@ -12,7 +12,11 @@ export default function InfoCards({ destination }: InfoCardsProps) {
     { icon: <Bus className="w-6 h-6 text-orange-500" />, label: "Transportation", value: destination.transportation },
     { icon: <ShieldCheck className="w-6 h-6 text-green-500" />, label: "Safety", value: destination.safety },
     { icon: <Wifi className="w-6 h-6 text-blue-500" />, label: "Internet", value: destination.internet },
-  ];
+  ].filter((item): item is { icon: React.ReactElement; label: string; value: string } =>
+    typeof item.value === 'string' && item.value.length > 0
+  );
+
+  if (infoItems.length === 0) return null;
 
   return (
     <div className="mt-16">

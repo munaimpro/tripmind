@@ -1,10 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Star, MapPin, Calendar, Wallet, Sparkles, ArrowRight } from "lucide-react";
-import { Trip } from "@/data/exploreTrips";
+import type { ApiTrip } from "@/types/api";
 
 interface TripCardProps {
-  trip: Trip;
+  trip: ApiTrip;
 }
 
 export default function TripCard({ trip }: TripCardProps) {
@@ -66,7 +66,7 @@ export default function TripCard({ trip }: TripCardProps) {
           </div>
         </div>
 
-        <Link href={`/explore/${trip.id}`} className="w-full">
+        <Link href={`/destinations/${trip._id}`} className="w-full">
           <button className="w-full py-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 text-indigo-600 dark:text-indigo-400 font-semibold text-sm flex items-center justify-center gap-2 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-300">
             View Details
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

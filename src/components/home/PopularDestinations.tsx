@@ -1,59 +1,31 @@
-import DestinationCard from "./DestinationCard";
-import { ArrowRight } from "lucide-react";
-import Link from "next/link";
+"use client";
 
-const destinations = [
-  {
-    id: "1",
-    title: "Kyoto Serenity",
-    location: "Kyoto, Japan",
-    image: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=1470&auto=format&fit=crop",
-    rating: 4.9,
-    price: "$1,200",
-  },
-  {
-    id: "2",
-    title: "Amalfi Coastal Drive",
-    location: "Campania, Italy",
-    image: "https://images.unsplash.com/photo-1533090161767-e6ffed986c88?q=80&w=1469&auto=format&fit=crop",
-    rating: 4.8,
-    price: "$1,850",
-  },
-  {
-    id: "3",
-    title: "Bali Retreat",
-    location: "Bali, Indonesia",
-    image: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?q=80&w=1338&auto=format&fit=crop",
-    rating: 4.7,
-    price: "$890",
-  },
-  {
-    id: "4",
-    title: "Swiss Alps Adventure",
-    location: "Zermatt, Switzerland",
-    image: "https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?q=80&w=1470&auto=format&fit=crop",
-    rating: 4.9,
-    price: "$2,100",
-  },
-  {
-    id: "5",
-    title: "Santorini Sunsets",
-    location: "Cyclades, Greece",
-    image: "https://images.unsplash.com/photo-1533105079780-92b9be482077?q=80&w=1374&auto=format&fit=crop",
-    rating: 4.8,
-    price: "$1,600",
-  },
-  {
-    id: "6",
-    title: "Banff Wilderness",
-    location: "Alberta, Canada",
-    image: "https://images.unsplash.com/photo-1518602164578-cd0074062767?q=80&w=1470&auto=format&fit=crop",
-    rating: 4.9,
-    price: "$1,150",
-  },
-];
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+import DestinationCard from "./DestinationCard";
+import DestinationCardSkeleton from "./DestinationCardSkeleton";
+import { getDestinations } from "@/lib/api";
+import type { ApiDestination } from "@/types/api";
 
 export default function PopularDestinations() {
+  const [destinations, setDestinations] = useState<ApiDestination[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    getDestinations()
+      .then((data) => {
+        // Show the first 6 destinations on the home page
+        setDestinations(data.slice(0, 6));
+      })
+      .catch((err: unknown) => {
+        const message = err instanceof Error ? err.message : "Failed to load destinations.";
+        setError(message);
+      })
+      .finally(() => setIsLoading(false));
+  }, []);
+
   return (
     <section className="py-20 lg:py-32 bg-white dark:bg-slate-950">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -71,11 +43,47 @@ export default function PopularDestinations() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {destinations.map((dest) => (
-            <DestinationCard key={dest.id} {...dest} />
-          ))}
-        </div>
+        {/* Error state */}
+        {error && (
+          <div className="text-center py-16 text-slate-500 dark:text-slate-400">
+            <p className="text-lg font-medium">Could not load destinations.</p>
+            <p className="text-sm mt-1">{error}</p>
+          </div>
+        )}
+
+        {/* Loading skeletons */}
+        {isLoading && !error && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <DestinationCardSkeleton key={i} />
+            ))}
+          </div>
+        )}
+
+        {/* Loaded destinations */}
+        {!isLoading && !error && destinations.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {destinations.map((dest) => (
+              <Link key={dest._id} href={`/destinations/${dest._id}`}>
+                <DestinationCard
+                  id={dest._id}
+                  title={dest.title}
+                  location={`${dest.location}, ${dest.country}`}
+                  image={dest.image}
+                  rating={dest.rating}
+                  price={`$${dest.budget}`}
+                />
+              </Link>
+            ))}
+          </div>
+        )}
+
+        {/* Empty state */}
+        {!isLoading && !error && destinations.length === 0 && (
+          <div className="text-center py-16 text-slate-500 dark:text-slate-400">
+            <p className="text-lg font-medium">No destinations available yet.</p>
+          </div>
+        )}
       </div>
     </section>
   );

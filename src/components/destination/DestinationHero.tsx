@@ -1,9 +1,9 @@
 import Image from "next/image";
 import { Star, MapPin, Calendar, Wallet, Heart, Sparkles, Wand2 } from "lucide-react";
-import { DestinationDetail } from "@/data/destinationDetails";
+import type { ApiDestination } from "@/types/api";
 
 interface DestinationHeroProps {
-  destination: DestinationDetail;
+  destination: ApiDestination;
 }
 
 export default function DestinationHero({ destination }: DestinationHeroProps) {
