@@ -5,13 +5,14 @@ import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   MapPin,
-  Heart,
   User,
   Sparkles,
   Home,
   LogOut,
-  History
+  History,
+  LucideIcon
 } from "lucide-react";
+import { authClient } from "@/lib/auth-client";
 
 interface DashboardSidebarProps {
   isSidebarOpen: boolean;
@@ -19,17 +20,39 @@ interface DashboardSidebarProps {
   handleLogout: () => void;
 }
 
+interface NavItem {
+  href: string;
+  label: string;
+  icon: LucideIcon;
+  exact: boolean;
+}
+
 export default function DashboardSidebar({ isSidebarOpen, setIsSidebarOpen, handleLogout }: DashboardSidebarProps) {
   const pathname = usePathname();
+  const { data: session } = authClient.useSession();
 
-  const navItems = [
-    { href: "/dashboard/user", label: "Dashboard", icon: LayoutDashboard, exact: true },
-    { href: "/dashboard/user/my-trips", label: "My Trips", icon: MapPin, exact: false },
-    { href: "/dashboard/user/history", label: "Trip History", icon: History, exact: false },
-    { href: "/planner", label: "AI Planner", icon: Sparkles, exact: false },
-    { href: "/dashboard/user/profile", label: "Profile", icon: User, exact: false },
-    { href: "/", label: "Home", icon: Home, exact: true },
-  ];
+  // 1. Fixed scoping by reassignment instead of re-declaration
+  let navItems: NavItem[] = [];
+
+  if (session?.user?.role === "admin") {
+    navItems = [
+      { href: "/dashboard/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
+      { href: "/dashboard/admin/analytics", label: "Analytics", icon: MapPin, exact: false },
+      { href: "/dashboard/admin/destinations", label: "Destinations", icon: History, exact: false },
+      { href: "/dashboard/admin/trips", label: "Trips", icon: History, exact: false },
+      { href: "/", label: "Home", icon: Home, exact: true },
+    ];
+  } else {
+    // Defaulting to user view if role is 'user' or if session is loading/null
+    navItems = [
+      { href: "/dashboard/user", label: "Dashboard", icon: LayoutDashboard, exact: true },
+      { href: "/dashboard/user/my-trips", label: "My Trips", icon: MapPin, exact: false },
+      { href: "/dashboard/user/history", label: "Trip History", icon: History, exact: false },
+      { href: "/planner", label: "AI Planner", icon: Sparkles, exact: false },
+      { href: "/dashboard/user/profile", label: "Profile", icon: User, exact: false },
+      { href: "/", label: "Home", icon: Home, exact: true },
+    ];
+  }
 
   const isActive = (href: string, exact?: boolean) => {
     if (exact) return pathname === href;
@@ -49,11 +72,10 @@ export default function DashboardSidebar({ isSidebarOpen, setIsSidebarOpen, hand
               key={item.href}
               href={item.href}
               onClick={() => setIsSidebarOpen(false)}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all duration-200 ${
-                active
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all duration-200 ${active
                   ? "bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 shadow-sm"
                   : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white"
-              }`}
+                }`}
             >
               <item.icon size={20} className={active ? "text-indigo-600 dark:text-indigo-400" : "text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300"} />
               {item.label}
@@ -61,7 +83,7 @@ export default function DashboardSidebar({ isSidebarOpen, setIsSidebarOpen, hand
           );
         })}
       </div>
-      
+
       <div className="p-4 border-t border-slate-200 dark:border-slate-800">
         <button
           onClick={handleLogout}
