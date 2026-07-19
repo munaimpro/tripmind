@@ -41,6 +41,31 @@ async function apiFetch<T>(path: string): Promise<T> {
   return json.data;
 }
 
+async function apiPost<T>(path: string, body: any): Promise<T> {
+  const response = await fetch(`${BASE_URL}${path}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+    cache: 'no-store',
+  });
+
+  if (!response.ok) {
+    throw new Error(
+      `API request failed: ${response.status} ${response.statusText} — ${path}`
+    );
+  }
+
+  const json: ApiResponse<T> = await response.json();
+
+  if (!json.success) {
+    throw new Error(json.message ?? `API returned success=false for ${path}`);
+  }
+
+  return json.data;
+}
+
 // ── Destinations ─────────────────────────────────────────────
 
 /**
@@ -97,4 +122,14 @@ export async function getRestaurants(): Promise<ApiRestaurant[]> {
  */
 export async function getActivities(): Promise<ApiActivity[]> {
   return apiFetch<ApiActivity[]>('/activities');
+}
+
+// ── AI Planner ───────────────────────────────────────────────
+
+export async function generateTrip(data: any): Promise<any> {
+  return apiPost<any>('/ai/generate-trip', data);
+}
+
+export async function optimizeBudget(aiPlanId: string, newBudget: string): Promise<any> {
+  return apiPost<any>('/ai/optimize-budget', { aiPlanId, newBudget });
 }

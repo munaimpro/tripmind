@@ -7,9 +7,9 @@ import {
   Heart,
   Clock,
   Sparkles,
-  User,
-  Settings,
   ChevronRight,
+  Plane,
+  Globe,
 } from "lucide-react";
 
 export default async function DashboardUserPage() {
@@ -30,6 +30,13 @@ export default async function DashboardUserPage() {
     year: "numeric",
     month: "long",
   });
+
+  const stats = [
+    { label: "Total Trips", value: "3", icon: Plane, color: "text-blue-600 dark:text-blue-400", bg: "bg-blue-100 dark:bg-blue-900/30" },
+    { label: "Saved Trips", value: "12", icon: Heart, color: "text-pink-600 dark:text-pink-400", bg: "bg-pink-100 dark:bg-pink-900/30" },
+    { label: "AI Plans", value: "5", icon: Sparkles, color: "text-indigo-600 dark:text-indigo-400", bg: "bg-indigo-100 dark:bg-indigo-900/30" },
+    { label: "Countries Visited", value: "4", icon: Globe, color: "text-emerald-600 dark:text-emerald-400", bg: "bg-emerald-100 dark:bg-emerald-900/30" },
+  ];
 
   const quickLinks = [
     {
@@ -63,93 +70,57 @@ export default async function DashboardUserPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-black pt-24 pb-12">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-
-        {/* Welcome Banner */}
-        <div className="bg-gradient-to-r from-indigo-600 to-violet-600 rounded-2xl p-8 shadow-lg shadow-indigo-500/20">
-          <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white overflow-hidden flex-shrink-0">
-              {user.image ? (
-                <img src={user.image} alt={user.name ?? "User"} className="w-full h-full object-cover" />
-              ) : (
-                <User size={32} />
-              )}
-            </div>
-            <div>
-              <p className="text-indigo-200 text-sm font-medium">Welcome back,</p>
-              <h1 className="text-white text-3xl font-bold">{firstName} 👋</h1>
-              <p className="text-indigo-200 text-sm mt-1">Member since {memberSince}</p>
-            </div>
-          </div>
+    <div className="space-y-8">
+      {/* Welcome Banner */}
+      <div className="bg-gradient-to-r from-indigo-600 to-violet-600 rounded-3xl p-8 sm:p-10 shadow-lg shadow-indigo-500/20 relative overflow-hidden">
+        <div className="absolute right-0 top-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
+        <div className="relative z-10">
+          <p className="text-indigo-100 text-sm sm:text-base font-medium mb-1">Welcome back,</p>
+          <h1 className="text-white text-3xl sm:text-4xl font-bold mb-2">{firstName} 👋</h1>
+          <p className="text-indigo-200 text-sm">Member since {memberSince}</p>
         </div>
+      </div>
 
-        {/* User Info Card */}
-        <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-zinc-200 dark:border-zinc-800 p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-zinc-900 dark:text-white">Account Details</h2>
+      {/* Statistics */}
+      <div>
+        <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-4">Overview</h2>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          {stats.map((stat, idx) => (
+            <div key={idx} className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col items-center sm:items-start text-center sm:text-left">
+              <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 ${stat.bg} ${stat.color}`}>
+                <stat.icon size={20} />
+              </div>
+              <p className="text-2xl font-bold text-slate-900 dark:text-white mb-1">{stat.value}</p>
+              <p className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">{stat.label}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Quick Links Grid */}
+      <div>
+        <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-4">Quick Access</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {quickLinks.map((item) => (
             <Link
-              href="/dashboard/user/profile"
-              className="flex items-center gap-1 text-sm text-indigo-600 dark:text-indigo-400 hover:underline"
+              key={item.href}
+              href={item.href}
+              className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-5 flex items-center gap-4 hover:border-indigo-300 dark:hover:border-indigo-700 hover:shadow-md transition-all group"
             >
-              <Settings size={14} />
-              Edit Profile
+              <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${item.color}`}>
+                <item.icon size={22} />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="font-semibold text-slate-900 dark:text-white">{item.label}</p>
+                <p className="text-sm text-slate-500 dark:text-slate-400 truncate">{item.description}</p>
+              </div>
+              <ChevronRight
+                size={18}
+                className="text-slate-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 group-hover:translate-x-0.5 transition-all flex-shrink-0"
+              />
             </Link>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="bg-zinc-50 dark:bg-zinc-950 rounded-xl p-4">
-              <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-1 uppercase tracking-wide">Full Name</p>
-              <p className="font-medium text-zinc-900 dark:text-white">{user.name ?? "—"}</p>
-            </div>
-            <div className="bg-zinc-50 dark:bg-zinc-950 rounded-xl p-4">
-              <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-1 uppercase tracking-wide">Email</p>
-              <p className="font-medium text-zinc-900 dark:text-white truncate">{user.email}</p>
-            </div>
-            <div className="bg-zinc-50 dark:bg-zinc-950 rounded-xl p-4">
-              <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-1 uppercase tracking-wide">Account Role</p>
-              <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 capitalize">
-                {(user as { role?: string }).role ?? "user"}
-              </span>
-            </div>
-            <div className="bg-zinc-50 dark:bg-zinc-950 rounded-xl p-4">
-              <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-1 uppercase tracking-wide">Email Verified</p>
-              <span className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold ${
-                user.emailVerified
-                  ? "bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300"
-                  : "bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300"
-              }`}>
-                {user.emailVerified ? "Verified" : "Not Verified"}
-              </span>
-            </div>
-          </div>
+          ))}
         </div>
-
-        {/* Quick Links Grid */}
-        <div>
-          <h2 className="text-lg font-semibold text-zinc-900 dark:text-white mb-4">Quick Access</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {quickLinks.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-zinc-200 dark:border-zinc-800 p-5 flex items-center gap-4 hover:border-indigo-300 dark:hover:border-indigo-700 hover:shadow-md transition-all group"
-              >
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${item.color}`}>
-                  <item.icon size={22} />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-zinc-900 dark:text-white">{item.label}</p>
-                  <p className="text-sm text-zinc-500 dark:text-zinc-400 truncate">{item.description}</p>
-                </div>
-                <ChevronRight
-                  size={18}
-                  className="text-zinc-400 group-hover:text-indigo-600 group-hover:translate-x-0.5 transition-all flex-shrink-0"
-                />
-              </Link>
-            ))}
-          </div>
-        </div>
-
       </div>
     </div>
   );

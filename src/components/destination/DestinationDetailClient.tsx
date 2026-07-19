@@ -54,8 +54,20 @@ export default function DestinationDetailClient({ id }: DestinationDetailClientP
           getTrips(),
         ]);
 
+      const locMatches = (item: { location?: string }) => {
+        if (!item.location) return false;
+        const loc = item.location.toLowerCase();
+        const destTitle = destination.title.toLowerCase();
+        const destLoc = destination.location.toLowerCase();
+        return loc.includes(destTitle) || loc.includes(destLoc);
+      };
+
+      const filteredHotels = hotels.filter(locMatches);
+      const filteredRestaurants = restaurants.filter(locMatches);
+      const filteredActivities = activities.filter(locMatches);
+
       // Extract activity names for the ActivitiesSection which expects string[]
-      const activityNames = activities.map((a: ApiActivity) => a.name);
+      const activityNames = filteredActivities.map((a: ApiActivity) => a.name);
 
       // Related trips: up to 4 trips that aren't the current destination's id
       // We use trips since they're the browse-level items
@@ -63,7 +75,7 @@ export default function DestinationDetailClient({ id }: DestinationDetailClientP
         .filter((t: ApiTrip) => t._id !== id)
         .slice(0, 4);
 
-      setData({ destination, hotels, restaurants, activityNames, relatedTrips });
+      setData({ destination, hotels: filteredHotels, restaurants: filteredRestaurants, activityNames, relatedTrips });
     } catch (err) {
       const message = err instanceof Error ? err.message : "Failed to load destination details.";
       setError(message);
