@@ -16,13 +16,31 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
 
+  const handleDemoUser = () => {
+    setEmail("user@example.com");
+    setPassword("password123");
+    setTimeout(() => {
+      const form = document.getElementById("login-form") as HTMLFormElement;
+      if (form) form.requestSubmit();
+    }, 100);
+  };
+
+  const handleDemoAdmin = () => {
+    setEmail("admin@example.com");
+    setPassword("admin123");
+    setTimeout(() => {
+      const form = document.getElementById("login-form") as HTMLFormElement;
+      if (form) form.requestSubmit();
+    }, 100);
+  };
+
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
     try {
-      const { data, error } = await authClient.signIn.email({
+      const { error } = await authClient.signIn.email({
         email,
         password,
       });
@@ -33,9 +51,9 @@ export default function LoginPage() {
         return;
       }
 
-      router.push("/dashboard/user");
+      router.push("/");
       router.refresh();
-    } catch (err: any) {
+    } catch (err) {
       setError(err.message || "An unexpected error occurred.");
       setLoading(false);
     }
@@ -57,7 +75,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen bg-slate-50 dark:bg-black pt-20">
+    <div className="flex min-h-screen bg-slate-50 dark:bg-slate-950 pt-20">
       <div className="hidden lg:flex lg:w-1/2 relative bg-indigo-900 overflow-hidden">
         <img
           src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2070&auto=format&fit=crop"
@@ -94,7 +112,26 @@ export default function LoginPage() {
               </div>
             )}
 
-            <form onSubmit={handleEmailLogin} className="space-y-5">
+            <div className="grid grid-cols-2 gap-4 mb-6">
+              <button
+                type="button"
+                onClick={handleDemoUser}
+                disabled={loading || googleLoading}
+                className="py-2 px-4 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-sm font-medium rounded-xl transition-colors border border-slate-200 dark:border-slate-700 flex justify-center disabled:opacity-70"
+              >
+                Demo User
+              </button>
+              <button
+                type="button"
+                onClick={handleDemoAdmin}
+                disabled={loading || googleLoading}
+                className="py-2 px-4 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-sm font-medium rounded-xl transition-colors border border-slate-200 dark:border-slate-700 flex justify-center disabled:opacity-70"
+              >
+                Demo Admin
+              </button>
+            </div>
+
+            <form id="login-form" onSubmit={handleEmailLogin} className="space-y-5">
               <div>
                 <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                   Email

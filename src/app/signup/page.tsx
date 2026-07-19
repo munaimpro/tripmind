@@ -18,6 +18,28 @@ export default function SignupPage() {
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
 
+  const handleDemoUser = () => {
+    setName("Demo User");
+    setEmail("user@example.com");
+    setPassword("password123");
+    setConfirmPassword("password123");
+    setTimeout(() => {
+      const form = document.getElementById("signup-form") as HTMLFormElement;
+      if (form) form.requestSubmit();
+    }, 100);
+  };
+
+  const handleDemoAdmin = () => {
+    setName("Demo Admin");
+    setEmail("admin@example.com");
+    setPassword("admin123");
+    setConfirmPassword("admin123");
+    setTimeout(() => {
+      const form = document.getElementById("signup-form") as HTMLFormElement;
+      if (form) form.requestSubmit();
+    }, 100);
+  };
+
   const handleEmailSignup = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -30,7 +52,7 @@ export default function SignupPage() {
     setError("");
 
     try {
-      const { data, error } = await authClient.signUp.email({
+      const { error } = await authClient.signUp.email({
         email,
         password,
         name,
@@ -44,9 +66,9 @@ export default function SignupPage() {
         return;
       }
 
-      router.push("/dashboard/user");
+      router.push("/");
       router.refresh();
-    } catch (err) {
+    } catch (err: string) {
       setError(err.message || "An unexpected error occurred.");
       setLoading(false);
     }
@@ -61,14 +83,14 @@ export default function SignupPage() {
         provider: "google",
         callbackURL: "/dashboard/user",
       });
-    } catch (err) {
+    } catch (err: any) {
       setError(err.message || "Failed to sign up with Google");
       setGoogleLoading(false);
     }
   };
 
   return (
-    <div className="flex min-h-screen bg-slate-50 dark:bg-black pt-20">
+    <div className="flex min-h-screen bg-slate-50 dark:bg-slate-950 pt-20">
       <div className="flex flex-col flex-1 items-center justify-center p-8 lg:w-1/2">
         <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl shadow-xl overflow-hidden border border-slate-200 dark:border-slate-800">
           <div className="p-8 sm:p-10">
@@ -87,7 +109,26 @@ export default function SignupPage() {
               </div>
             )}
 
-            <form onSubmit={handleEmailSignup} className="space-y-5">
+            <div className="grid grid-cols-2 gap-4 mb-6">
+              <button
+                type="button"
+                onClick={handleDemoUser}
+                disabled={loading || googleLoading}
+                className="py-2 px-4 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-sm font-medium rounded-xl transition-colors border border-slate-200 dark:border-slate-700 flex justify-center disabled:opacity-70"
+              >
+                Demo User
+              </button>
+              <button
+                type="button"
+                onClick={handleDemoAdmin}
+                disabled={loading || googleLoading}
+                className="py-2 px-4 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-sm font-medium rounded-xl transition-colors border border-slate-200 dark:border-slate-700 flex justify-center disabled:opacity-70"
+              >
+                Demo Admin
+              </button>
+            </div>
+
+            <form id="signup-form" onSubmit={handleEmailSignup} className="space-y-5">
               <div>
                 <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                   Full Name
