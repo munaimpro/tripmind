@@ -119,18 +119,20 @@ export default function AdminDestinationsPage() {
           status: "Published",
           image: selectedDestination.image || "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=150&q=80"
         };
-        const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/destinations`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/add-destination`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         });
         if (!res.ok) throw new Error("Failed to create destination.");
       } else if (modalType === "edit") {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/destinations/${selectedDestination._id}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/destination/${selectedDestination._id}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(selectedDestination),
         });
+        console.log(await res.json());
+        console.log(selectedDestination);
         if (!res.ok) throw new Error("Failed to update destination.");
       }
       setIsUpsertModalOpen(false);
@@ -142,7 +144,7 @@ export default function AdminDestinationsPage() {
 
   const confirmDelete = async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/destinations/${selectedDestination._id}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/delete-destination/${selectedDestination._id}`, {
         method: "DELETE",
       });
       if (!res.ok) throw new Error("Failed to delete destination.");
@@ -289,7 +291,7 @@ export default function AdminDestinationsPage() {
                           <div>
                             <div className="font-semibold text-slate-900 dark:text-white flex items-center gap-1.5">
                               {dest.title}
-                              {dest.isAIRecommended && <Sparkles size={12} className="text-violet-500" title="AI Recommended" />}
+                              {dest.isAIRecommended && <Sparkles size={12} className="text-violet-500" name="AI Recommended" />}
                             </div>
                             <p className="text-xs text-slate-400 dark:text-slate-500">{dest.country}</p>
                           </div>
@@ -426,7 +428,7 @@ export default function AdminDestinationsPage() {
                 </div>
                 <div className="sm:col-span-2">
                   <label className="block text-xs font-semibold text-slate-400 uppercase mb-1">Travel Type</label>
-                  <select disabled={modalType === "view"} value={selectedDestination.type} onChange={(e) => setSelectedDestination({ ...selectedDestination, type: e.target.value })} className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:border-indigo-500 text-slate-900 dark:text-white disabled:opacity-75" >
+                  <select disabled={modalType === "view"} value={selectedDestination.travelType} onChange={(e) => setSelectedDestination({ ...selectedDestination, travelType: e.target.value })} className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:border-indigo-500 text-slate-900 dark:text-white disabled:opacity-75" >
                     {travelTypes.filter(t => t !== "All").map(t => <option key={t} value={t}>{t}</option>)}
                   </select>
                 </div>
