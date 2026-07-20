@@ -36,7 +36,7 @@ export default function TripCard({ trip }: TripCardProps) {
              {trip.travelType}
            </span>
            <span className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-md px-2.5 py-1 rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-200 shadow-sm">
-             {trip.season}
+            {trip.bestSeason}
            </span>
         </div>
       </div>
