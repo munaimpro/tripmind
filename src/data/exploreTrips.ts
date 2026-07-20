@@ -15,7 +15,7 @@ export interface Trip {
 
 export const exploreTrips: Trip[] = [
   {
-    id: "trip-1",
+    _id: "trip-1",
     title: "Kyoto Heritage Tour",
     country: "Japan",
     location: "Kyoto",
@@ -29,7 +29,7 @@ export const exploreTrips: Trip[] = [
     isAIRecommended: true
   },
   {
-    id: "trip-2",
+    _id: "trip-2",
     title: "Swiss Alps Adventure",
     country: "Switzerland",
     location: "Zermatt",
@@ -42,7 +42,7 @@ export const exploreTrips: Trip[] = [
     travelType: 'Adventure'
   },
   {
-    id: "trip-3",
+    _id: "trip-3",
     title: "Maldives Island Escape",
     country: "Maldives",
     location: "Male Atoll",
@@ -56,7 +56,7 @@ export const exploreTrips: Trip[] = [
     isAIRecommended: true
   },
   {
-    id: "trip-4",
+    _id: "trip-4",
     title: "Santorini Sunset Gateway",
     country: "Greece",
     location: "Oia",
@@ -69,7 +69,7 @@ export const exploreTrips: Trip[] = [
     travelType: 'Cultural'
   },
   {
-    id: "trip-5",
+    _id: "trip-5",
     title: "Banff National Park Discovery",
     country: "Canada",
     location: "Alberta",
@@ -82,7 +82,7 @@ export const exploreTrips: Trip[] = [
     travelType: 'Nature'
   },
   {
-    id: "trip-6",
+    _id: "trip-6",
     title: "Bali Surf & Yoga Retreat",
     country: "Indonesia",
     location: "Ubud & Canggu",
@@ -96,7 +96,7 @@ export const exploreTrips: Trip[] = [
     isAIRecommended: true
   },
   {
-    id: "trip-7",
+    _id: "trip-7",
     title: "Machu Picchu Trek",
     country: "Peru",
     location: "Cusco",
@@ -109,7 +109,7 @@ export const exploreTrips: Trip[] = [
     travelType: 'Adventure'
   },
   {
-    id: "trip-8",
+    _id: "trip-8",
     title: "Amalfi Coast Drive",
     country: "Italy",
     location: "Positano",
@@ -122,7 +122,7 @@ export const exploreTrips: Trip[] = [
     travelType: 'Luxury'
   },
   {
-    id: "trip-9",
+    _id: "trip-9",
     title: "Costa Rica Rainforest",
     country: "Costa Rica",
     location: "Monteverde",
@@ -136,7 +136,7 @@ export const exploreTrips: Trip[] = [
     isAIRecommended: true
   },
   {
-    id: "trip-10",
+    _id: "trip-10",
     title: "Tokyo Tech & Culture",
     country: "Japan",
     location: "Tokyo",
@@ -149,7 +149,7 @@ export const exploreTrips: Trip[] = [
     travelType: 'Cultural'
   },
   {
-    id: "trip-11",
+    _id: "trip-11",
     title: "Bora Bora Honeymoon",
     country: "French Polynesia",
     location: "Bora Bora",
@@ -162,7 +162,7 @@ export const exploreTrips: Trip[] = [
     travelType: 'Luxury'
   },
   {
-    id: "trip-12",
+    _id: "trip-12",
     title: "New Zealand South Island",
     country: "New Zealand",
     location: "Queenstown",
@@ -176,7 +176,7 @@ export const exploreTrips: Trip[] = [
     isAIRecommended: true
   },
   {
-    id: "trip-13",
+    _id: "trip-13",
     title: "Paris Family Holiday",
     country: "France",
     location: "Paris",
@@ -189,7 +189,7 @@ export const exploreTrips: Trip[] = [
     travelType: 'Family'
   },
   {
-    id: "trip-14",
+    _id: "trip-14",
     title: "Serengeti Safari",
     country: "Tanzania",
     location: "Serengeti",
@@ -202,7 +202,7 @@ export const exploreTrips: Trip[] = [
     travelType: 'Nature'
   },
   {
-    id: "trip-15",
+    _id: "trip-15",
     title: "Disney World Adventure",
     country: "USA",
     location: "Orlando",
@@ -215,7 +215,7 @@ export const exploreTrips: Trip[] = [
     travelType: 'Family'
   },
   {
-    id: "trip-16",
+    _id: "trip-16",
     title: "Iceland Northern Lights",
     country: "Iceland",
     location: "Reykjavik",
