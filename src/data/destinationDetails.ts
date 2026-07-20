@@ -19,7 +19,7 @@ export interface DestinationDetail extends Trip {
 }
 
 export const getDestinationById = (id: string): DestinationDetail | undefined => {
-  const baseTrip = exploreTrips.find(t => t.id === id);
+  const baseTrip = exploreTrips.find(t => t._id === id);
   if (!baseTrip) return undefined;
 
   // We map the base trip to full details. 
