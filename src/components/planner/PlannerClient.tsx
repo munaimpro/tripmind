@@ -17,11 +17,6 @@ export default function PlannerClient() {
         setLastData(data);
         try {
             const apiResult = await generateTrip(data);
-            // Ensure the returned structure matches AIPlanResult or map it if needed.
-            // We assume the backend returns the structure defined in api-contract.md
-            // Output: itinerary, hotels, restaurants, transportation, activities, budget, tips
-            // The instructions say "Design the page according to the backend response structure."
-            // But we mapped it to AIPlanResult previously. Let's merge it:
             setResult({
                 title: `Magical ${data.duration}-Day Trip to ${data.destination}`,
                 destination: data.destination,
@@ -60,7 +55,48 @@ export default function PlannerClient() {
     };
 
     const handleSaveTrip = async () => {
-        alert("Trip saved successfully!");
+        if (!result) {
+            alert("No trip plan available to save!");
+            return;
+        }
+
+        setIsLoading(true);
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/add-trip`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    title: result.title || "Untitled AI Trip",
+                    country: result.destination ? result.destination.split(',').pop()?.trim() : "Global",
+                    location: result.destination || "Various Locations",
+                    image: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=1000&auto=format&fit=crop",
+                    description: result.summary || "No description provided.",
+                    durationDays: Number(result.duration) || 3,
+                    budget: Number(result.totalEstimatedCost) || 500,
+                    rating: 4.8,
+                    bestSeason: "All Year",
+                    travelType: lastData?.travelStyle || "General",
+                    difficulty: "Easy",
+                    maxTravelers: lastData?.groupType === "Solo" ? 1 : lastData?.groupType === "Couple" ? 2 : 8,
+                    isAIRecommended: true,
+                    status: "Published"
+                })
+            });
+
+            if (!response.ok) throw new Error("Failed to save trip");
+
+            const resData = await response.json();
+            if (resData.success) {
+                alert("Trip saved successfully here!");
+            } else {
+                alert(resData.message || "Failed to save the trip.");
+            }
+        } catch (error) {
+            console.error("Error saving trip:", error);
+            alert("An error occurred while saving the trip.");
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const handleGenerateAgain = async () => {
