@@ -47,13 +47,8 @@ export const config = {
   matcher: [
     // Protect all dashboard routes (user & admin)
     "/dashboard/:path*",
-    // Protect AI Planner
-    "/planner",
-    "/planner/:path*",
     // Protect top-level protected pages
     "/profile",
-    "/settings",
     "/my-trips",
-    "/saved-trips",
   ],
 };
