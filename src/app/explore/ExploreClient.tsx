@@ -108,7 +108,7 @@ export default function ExploreClient() {
 
     // Season
     if (filters.season !== "All") {
-      result = result.filter((t) => t.season === filters.season);
+      result = result.filter((t) => t.bestSeason === filters.season);
     }
 
     // Budget
