@@ -30,7 +30,7 @@ export interface ApiTrip {
   durationDays: number;
   budget: number;
   rating: number;
-  season: Season;
+  bestSeason: Season;
   travelType: TravelType;
   isAIRecommended?: boolean;
   createdAt?: string;

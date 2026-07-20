@@ -47,20 +47,6 @@ export default async function DashboardUserPage() {
       color: "bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400",
     },
     {
-      href: "/dashboard/user/saved",
-      icon: Heart,
-      label: "Saved Trips",
-      description: "Explore your bookmarked destinations",
-      color: "bg-pink-50 dark:bg-pink-900/20 text-pink-600 dark:text-pink-400",
-    },
-    {
-      href: "/dashboard/user/history",
-      icon: Clock,
-      label: "Trip History",
-      description: "Review your past adventures",
-      color: "bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400",
-    },
-    {
       href: "/planner",
       icon: Sparkles,
       label: "AI Planner",

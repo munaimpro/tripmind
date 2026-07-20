@@ -127,46 +127,13 @@ export default async function DashboardUserProfilePage() {
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-end">
+              {/* <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-end">
                 <button type="button" className="px-6 py-2.5 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition-colors shadow-sm">
                   Save Changes
                 </button>
-              </div>
+              </div> */}
             </form>
           </div>
-
-          {/* Security Settings */}
-          <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 md:p-8 border border-slate-200 dark:border-slate-800 shadow-sm">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
-                <Shield size={20} />
-              </div>
-              <h3 className="text-xl font-bold text-slate-900 dark:text-white">Security</h3>
-            </div>
-
-            <div className="space-y-5">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl">
-                <div>
-                  <h4 className="font-semibold text-slate-900 dark:text-white mb-1">Change Password</h4>
-                  <p className="text-sm text-slate-500 dark:text-slate-400">Ensure your account is using a long, random password to stay secure.</p>
-                </div>
-                <button className="px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-medium rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors whitespace-nowrap text-sm">
-                  Update Password
-                </button>
-              </div>
-
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl">
-                <div>
-                  <h4 className="font-semibold text-slate-900 dark:text-white mb-1">Two-Factor Authentication</h4>
-                  <p className="text-sm text-slate-500 dark:text-slate-400">Add additional security to your account using two-factor authentication.</p>
-                </div>
-                <button className="px-4 py-2 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 font-medium rounded-lg hover:bg-indigo-100 dark:hover:bg-indigo-900/40 transition-colors whitespace-nowrap text-sm">
-                  Enable 2FA
-                </button>
-              </div>
-            </div>
-          </div>
-
         </div>
       </div>
     </div>

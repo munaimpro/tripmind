@@ -22,7 +22,6 @@ const BASE_URL = process.env.NEXT_PUBLIC_SERVER_URL ?? 'http://localhost:8000';
 
 async function apiFetch<T>(path: string): Promise<T> {
   const response = await fetch(`${BASE_URL}${path}`, {
-    // Disable Next.js default caching so pages always get fresh data
     cache: 'no-store',
   });
 
@@ -34,8 +33,8 @@ async function apiFetch<T>(path: string): Promise<T> {
 
   const json: ApiResponse<T> = await response.json();
 
-  if (!json.success) {
-    throw new Error(json.message ?? `API returned success=false for ${path}`);
+  if (!json.success || json.data === null || json.data === undefined) {
+    throw new Error(json.message ?? `Requested resource not found for ${path}`);
   }
 
   return json.data;
@@ -92,6 +91,14 @@ export async function getDestinationById(id: string): Promise<ApiDestination> {
  */
 export async function getTrips(): Promise<ApiTrip[]> {
   return apiFetch<ApiTrip[]>('/trips');
+}
+
+/**
+ * Fetch a single trip by its MongoDB ObjectId string.
+ * Used on the Trip Detail page.
+ */
+export async function getTripById(id: string): Promise<ApiTrip> {
+  return apiFetch<ApiTrip>(`/trips/${id}`);
 }
 
 // ── Hotels ───────────────────────────────────────────────────

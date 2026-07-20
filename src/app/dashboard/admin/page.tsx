@@ -47,11 +47,8 @@ export default async function DashboardAdminPage() {
 
   // 2. Quick Actions Data
   const quickActions = [
-    { href: "/dashboard/admin/destinations/new", label: "Add Destination", description: "Launch new location", icon: Plus, color: "bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400" },
+    { href: "/dashboard/admin/destinations", label: "Add Destination", description: "Launch new location", icon: Plus, color: "bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400" },
     { href: "/dashboard/admin/trips", label: "Manage Trips", description: "Review and edit itineraries", icon: Layers, color: "bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400" },
-    { href: "/dashboard/admin/users", label: "Manage Users", description: "Control user roles & access", icon: Users, color: "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400" },
-    { href: "/dashboard/admin/analytics", label: "View Analytics", description: "Deep dive insights", icon: BarChart3, color: "bg-violet-50 dark:bg-violet-900/20 text-violet-600 dark:text-violet-400" },
-    { href: "/dashboard/admin/reviews", label: "View Reviews", description: "Moderate user feedback", icon: MessageSquare, color: "bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400" },
   ];
 
   return (
@@ -69,7 +66,7 @@ export default async function DashboardAdminPage() {
           </p>
         </div>
         <Link
-          href="/dashboard/admin/destinations/new"
+          href="/dashboard/admin/destinations"
           className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-sm transition-all shadow-sm shadow-indigo-500/10 group self-start sm:self-auto"
         >
           <Plus size={18} className="group-hover:rotate-90 transition-transform duration-200" />

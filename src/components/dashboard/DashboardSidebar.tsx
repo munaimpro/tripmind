@@ -34,10 +34,9 @@ export default function DashboardSidebar({ isSidebarOpen, setIsSidebarOpen, hand
   // 1. Fixed scoping by reassignment instead of re-declaration
   let navItems: NavItem[] = [];
 
-  if (session?.user?.role === "admin") {
+  if (session?.user?.role == "admin") {
     navItems = [
       { href: "/dashboard/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
-      { href: "/dashboard/admin/analytics", label: "Analytics", icon: MapPin, exact: false },
       { href: "/dashboard/admin/destinations", label: "Destinations", icon: History, exact: false },
       { href: "/dashboard/admin/trips", label: "Trips", icon: History, exact: false },
       { href: "/", label: "Home", icon: Home, exact: true },
@@ -47,7 +46,6 @@ export default function DashboardSidebar({ isSidebarOpen, setIsSidebarOpen, hand
     navItems = [
       { href: "/dashboard/user", label: "Dashboard", icon: LayoutDashboard, exact: true },
       { href: "/dashboard/user/my-trips", label: "My Trips", icon: MapPin, exact: false },
-      { href: "/dashboard/user/history", label: "Trip History", icon: History, exact: false },
       { href: "/planner", label: "AI Planner", icon: Sparkles, exact: false },
       { href: "/dashboard/user/profile", label: "Profile", icon: User, exact: false },
       { href: "/", label: "Home", icon: Home, exact: true },

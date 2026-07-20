@@ -4,8 +4,8 @@ import { useState, useEffect, useCallback } from "react";
 import { AlertTriangle, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
-import type { ApiDestination, ApiHotel, ApiRestaurant, ApiActivity, ApiTrip } from "@/types/api";
-import { getDestinationById, getHotels, getRestaurants, getActivities, getTrips } from "@/lib/api";
+import type { ApiHotel, ApiRestaurant, ApiActivity, ApiTrip } from "@/types/api";
+import { getTripById, getHotels, getRestaurants, getActivities, getTrips } from "@/lib/api";
 
 import DestinationDetailSkeleton from "@/components/destination/DestinationDetailSkeleton";
 import Breadcrumb from "@/components/destination/Breadcrumb";
@@ -22,19 +22,19 @@ import MapPlaceholder from "@/components/destination/MapPlaceholder";
 import CTASection from "@/components/destination/CTASection";
 import RelatedDestinations from "@/components/destination/RelatedDestinations";
 
-interface DestinationDetailClientProps {
+interface TripDetailClientProps {
   id: string;
 }
 
 interface PageData {
-  destination: ApiDestination;
+  trip: ApiTrip;
   hotels: ApiHotel[];
   restaurants: ApiRestaurant[];
   activityNames: string[];
   relatedTrips: ApiTrip[];
 }
 
-export default function DestinationDetailClient({ id }: DestinationDetailClientProps) {
+export default function TripDetailClient({ id }: TripDetailClientProps) {
   const [data, setData] = useState<PageData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -45,44 +45,56 @@ export default function DestinationDetailClient({ id }: DestinationDetailClientP
 
     try {
       // Fetch all data sources in parallel
-      const [destination, hotels, restaurants, activities, allTrips] =
+      const [trip, hotels, restaurants, activities, allTrips] =
         await Promise.all([
-          getDestinationById(id),
+          getTripById(id),
           getHotels(),
           getRestaurants(),
           getActivities(),
           getTrips(),
         ]);
-      console.log(destination);
 
-      if (!destination) {
-        throw new Error("Destination data was not found.");
+      if (!trip) {
+        throw new Error("Trip data was not found.");
       }
 
+      // Matching hotels, restaurants, and activities based on trip title or location
       const locMatches = (item: { location?: string }) => {
         if (!item.location) return false;
         const loc = item.location.toLowerCase();
-        const destTitle = destination.title.toLowerCase();
-        const destLoc = destination.location.toLowerCase();
-        return loc.includes(destTitle) || loc.includes(destLoc);
+        const tripTitle = trip.title?.toLowerCase() || "";
+        const tripLoc = trip.location?.toLowerCase() || "";
+        const tripCountry = trip.country?.toLowerCase() || "";
+
+        return (
+          loc.includes(tripTitle) ||
+          loc.includes(tripLoc) ||
+          loc.includes(tripCountry)
+        );
       };
 
       const filteredHotels = hotels.filter(locMatches);
       const filteredRestaurants = restaurants.filter(locMatches);
       const filteredActivities = activities.filter(locMatches);
 
-      // Extract activity names for the ActivitiesSection which expects string[]
+      // Extract activity names for the ActivitiesSection
       const activityNames = filteredActivities.map((a: ApiActivity) => a.name);
 
-      // Related trips: up to 4 trips that aren't the current destination's id
-      // We use trips since they're the browse-level items
+      // Related trips: up to 4 trips excluding current trip
       const relatedTrips = allTrips
         .filter((t: ApiTrip) => t._id !== id)
         .slice(0, 4);
 
-      setData({ destination, hotels: filteredHotels, restaurants: filteredRestaurants, activityNames, relatedTrips });
+      setData({
+        trip,
+        hotels: filteredHotels,
+        restaurants: filteredRestaurants,
+        activityNames,
+        relatedTrips,
+      });
     } catch (err) {
-      const message = err instanceof Error ? err.message : "Failed to load destination details.";
+      const message =
+        err instanceof Error ? err.message : "Failed to load trip details.";
       setError(message);
     } finally {
       setIsLoading(false);
@@ -111,10 +123,11 @@ export default function DestinationDetailClient({ id }: DestinationDetailClientP
           <AlertTriangle className="w-10 h-10 text-red-500" />
         </div>
         <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-3">
-          Destination Not Found
+          Trip Not Found
         </h1>
         <p className="text-slate-500 dark:text-slate-400 max-w-md mb-8">
-          {error ?? "We couldn't find the destination you're looking for. It may have been moved or the ID is invalid."}
+          {error ??
+            "We couldn't find the trip you're looking for. It may have been moved or the ID is invalid."}
         </p>
         <Link
           href="/explore"
@@ -127,47 +140,36 @@ export default function DestinationDetailClient({ id }: DestinationDetailClientP
     );
   }
 
-  const { destination, hotels, restaurants, activityNames, relatedTrips } = data;
+  const { trip, hotels, restaurants, activityNames, relatedTrips } = data;
 
-  // Build gallery: use destination.gallery if present, otherwise fallback to main image
-  const gallery: string[] =
-    // destination.gallery && destination.gallery.length > 0
-      // ? destination.gallery
-       [destination.image];
-
-  // Build attractions from destination.attractions (optional field)
-  const attractions = destination.attractions ?? [];
-
-  // Build reviews from destination.reviews (optional field)
-  const reviews = destination.reviews ?? [];
+  // Build gallery using trip image
+  const gallery: string[] = [trip.image];
 
   return (
     <div className="flex flex-col min-h-screen bg-slate-50 dark:bg-slate-950">
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
-        <Breadcrumb destinationName={destination.title} />
+        {/* Breadcrumb with Trip Title */}
+        <Breadcrumb destinationName={trip.title} />
 
-        <DestinationHero destination={destination} />
+        {/* Dynamic Trip Components */}
+        <DestinationHero destination={trip as any} />
 
         <ImageGallery images={gallery} />
 
-        <AboutDestination destination={destination} />
+        <AboutDestination destination={trip as any} />
 
-        <InfoCards destination={destination} />
-
-        {attractions.length > 0 && (
-          <AttractionsSection attractions={attractions} />
-        )}
+        <InfoCards destination={trip as any} />
 
         {activityNames.length > 0 && (
           <ActivitiesSection activities={activityNames} />
         )}
 
-        <HotelsPreview hotels={hotels.slice(0, 3)} />
+        {hotels.length > 0 && (
+          <HotelsPreview hotels={hotels.slice(0, 3)} />
+        )}
 
-        <RestaurantsPreview restaurants={restaurants.slice(0, 3)} />
-
-        {reviews.length > 0 && (
-          <ReviewsSection reviews={reviews} />
+        {restaurants.length > 0 && (
+          <RestaurantsPreview restaurants={restaurants.slice(0, 3)} />
         )}
 
         <MapPlaceholder />

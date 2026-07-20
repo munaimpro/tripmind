@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { getDestinationById } from "@/lib/api";
-import DestinationDetailClient from "@/components/destination/DestinationDetailClient";
+import TripDetailClient from "@/components/explore/TripDetailClient";
 
 interface DestinationPageProps {
   params: Promise<{ id: string }>;
@@ -8,7 +8,7 @@ interface DestinationPageProps {
 
 export default async function DestinationPage({ params }: DestinationPageProps) {
   const resolvedParams = await params;
-  return <DestinationDetailClient id={resolvedParams.id} />;
+  return <TripDetailClient id={resolvedParams.id} />;
 }
 
 // Generate metadata for SEO

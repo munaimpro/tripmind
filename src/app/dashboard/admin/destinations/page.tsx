@@ -117,7 +117,8 @@ export default function AdminDestinationsPage() {
         const payload = {
           ...selectedDestination,
           status: "Published",
-          image: selectedDestination.image || "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=150&q=80"
+          image: selectedDestination.image || "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=150&q=80",
+          gallery: []
         };
         const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/add-destination`, {
           method: "POST",
@@ -396,7 +397,7 @@ export default function AdminDestinationsPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-semibold text-slate-400 uppercase mb-1">Destination Name</label>
-                  <input type="text" disabled={modalType === "view"} value={selectedDestination.name} onChange={(e) => setSelectedDestination({ ...selectedDestination, name: e.target.value })} className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:border-indigo-500 text-slate-900 dark:text-white disabled:opacity-75" />
+                  <input type="text" disabled={modalType === "view"} value={selectedDestination.title} onChange={(e) => setSelectedDestination({ ...selectedDestination, title: e.target.value })} className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:border-indigo-500 text-slate-900 dark:text-white disabled:opacity-75" />
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-slate-400 uppercase mb-1">Country</label>
@@ -412,7 +413,7 @@ export default function AdminDestinationsPage() {
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-slate-400 uppercase mb-1">Duration</label>
-                  <input type="text" placeholder="e.g. 5 Days" disabled={modalType === "view"} value={selectedDestination.duration} onChange={(e) => setSelectedDestination({ ...selectedDestination, duration: e.target.value })} className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:border-indigo-500 text-slate-900 dark:text-white disabled:opacity-75" />
+                  <input type="number" placeholder="e.g. 5 Days" disabled={modalType === "view"} value={selectedDestination.duration} onChange={(e) => setSelectedDestination({ ...selectedDestination, duration: e.target.value })} className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:border-indigo-500 text-slate-900 dark:text-white disabled:opacity-75" />
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-slate-400 uppercase mb-1">Estimated Budget ($)</label>
@@ -482,7 +483,7 @@ export default function AdminDestinationsPage() {
             </div>
             <div className="space-y-1">
               <h3 className="text-lg font-bold text-slate-900 dark:text-white">Delete Destination?</h3>
-              <p className="text-sm text-slate-500 dark:text-slate-400">Are you sure you want to remove <b>{selectedDestination.name}</b>? This asset action cannot be reversed.</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400">Are you sure you want to remove <b>{selectedDestination.title}</b>? This asset action cannot be reversed.</p>
             </div>
             <div className="flex items-center gap-3 pt-2">
               <button onClick={() => setIsDeleteModalOpen(false)} className="flex-1 py-2.5 text-sm font-semibold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 rounded-xl transition-colors">Cancel</button>

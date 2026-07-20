@@ -1,20 +1,20 @@
 import Image from "next/image";
 import { Star, MapPin, Calendar, Wallet, Heart, Sparkles, Wand2 } from "lucide-react";
-import type { ApiDestination } from "@/types/api";
+import type { ApiTrip } from "@/types/api";
 
-interface DestinationHeroProps {
-  destination: ApiDestination;
+interface TripHeroProps {
+  trip: ApiTrip;
 }
 
-export default function DestinationHero({ destination }: DestinationHeroProps) {
+export default function TripHero({ trip }: TripHeroProps) {
   return (
     <div className="relative rounded-3xl overflow-hidden bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800">
       {/* Background Image */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-slate-200 dark:bg-slate-800 animate-pulse"></div>
         <Image
-          src={destination.image}
-          alt={destination.title}
+          src={trip.image}
+          alt={trip.title}
           fill
           className="object-cover opacity-60 mix-blend-overlay z-10"
           priority
@@ -30,15 +30,15 @@ export default function DestinationHero({ destination }: DestinationHeroProps) {
           <div className="flex flex-wrap items-center gap-3 mb-6">
             <span className="bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-full text-xs font-semibold text-white flex items-center gap-1.5 shadow-sm">
               <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-              {destination.rating.toFixed(1)}
+              {trip.rating.toFixed(1)}
             </span>
             <span className="bg-indigo-600/90 backdrop-blur-md px-3 py-1.5 rounded-full text-xs font-semibold text-white shadow-sm">
-              {destination.travelType}
+              {trip.travelType}
             </span>
             <span className="bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-full text-xs font-semibold text-white shadow-sm">
-              {destination.season}
+              {trip.bestSeason}
             </span>
-            {destination.isAIRecommended && (
+            {trip.isAIRecommended && (
               <span className="bg-fuchsia-600/90 backdrop-blur-md px-3 py-1.5 rounded-full text-xs font-semibold text-white flex items-center gap-1.5 shadow-sm">
                 <Sparkles className="w-3.5 h-3.5" />
                 AI Recommended
@@ -47,16 +47,16 @@ export default function DestinationHero({ destination }: DestinationHeroProps) {
           </div>
 
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 tracking-tight">
-            {destination.title}
+            {trip.title}
           </h1>
 
           <div className="flex items-center gap-2 text-slate-200 text-lg mb-6">
             <MapPin className="w-5 h-5 text-indigo-400" />
-            <span>{destination.location}, {destination.country}</span>
+            <span>{trip.location}, {trip.country}</span>
           </div>
 
           <p className="text-slate-300 text-lg max-w-2xl line-clamp-2 md:line-clamp-none">
-            {destination.description}
+            {trip.description}
           </p>
         </div>
 
@@ -69,7 +69,7 @@ export default function DestinationHero({ destination }: DestinationHeroProps) {
                 </div>
                 <div>
                   <p className="text-slate-300 text-xs font-medium uppercase tracking-wider">Est. Budget</p>
-                  <p className="text-white font-bold text-xl">${destination.budget}</p>
+                  <p className="text-white font-bold text-xl">${trip.budget}</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
@@ -78,7 +78,7 @@ export default function DestinationHero({ destination }: DestinationHeroProps) {
                 </div>
                 <div>
                   <p className="text-slate-300 text-xs font-medium uppercase tracking-wider">Avg. Duration</p>
-                  <p className="text-white font-bold text-xl">{destination.duration} Days</p>
+                  <p className="text-white font-bold text-xl">{trip.durationDays} Days</p>
                 </div>
               </div>
             </div>
