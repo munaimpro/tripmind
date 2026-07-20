@@ -60,7 +60,7 @@ export interface ApiDestination {
   location: string;
   image: string;
   description: string;
-  durationDays: number;
+  duration: number;
   budget: number;
   rating: number;
   season: Season;
