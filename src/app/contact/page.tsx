@@ -609,7 +609,7 @@ export default function ContactPage() {
                 className="group relative p-4 rounded-full bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
               >
                 <div className="absolute -inset-0.5 rounded-full bg-gradient-to-r from-indigo-500 to-sky-500 opacity-0 group-hover:opacity-100 transition-opacity blur-sm -z-10" />
-                <social.icon size={20} className="text-slate-600 dark:text-slate-300 group-hover:text-indigo-500 transition-colors" />
+                <social.icon className="text-slate-600 dark:text-slate-300 group-hover:text-indigo-500 transition-colors" />
               </a>
             ))}
           </div>
